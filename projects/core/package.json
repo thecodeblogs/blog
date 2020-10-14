@@ -1,6 +1,6 @@
 {
-  "name": "core",
-  "version": "0.0.1",
+  "name": "@thecodeblogs/blog/core",
+  "version": "0.3.0",
   "dependencies": {
     "tslib": "^2.0.0"
   },
