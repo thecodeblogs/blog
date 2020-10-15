@@ -1,0 +1,15 @@
+.sidenav {
+  max-height: calc(100vh - 100px);
+}
+
+@media screen and (max-height: 560px) {
+  .sidenav {
+    max-height: calc(100vh);
+  }
+}
+
+h2, h3 {
+  margin-left: 10px;
+  justify-content: right;
+}
+

@@ -1,0 +1,16 @@
+<div class="sidenav no-scrollbar">
+    <mat-nav-list *ngFor="let container of entriesByMonthAndYear">
+        <h3>{{getMonthAndYearFromKey(container.month_year)}}</h3>
+        <a mat-list-item *ngFor="let entry of container.entries" href="javascript:void(0)" (click)="routeTo(entry)">{{entry.title}}</a>
+    </mat-nav-list>
+
+    <ng-container *ngIf="identity?.id === 1">
+        <h2>Misc</h2>
+
+        <mat-nav-list>
+            <a mat-list-item href="javascript:void(0);" (click)="routeTo(null)">Create</a>
+        </mat-nav-list>
+    </ng-container>
+    <h3 *ngIf="identity">Logged in as {{identity?.email}}</h3>
+</div>
+

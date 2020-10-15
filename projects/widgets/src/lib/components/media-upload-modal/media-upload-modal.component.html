@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Upload an Image</h1>
+<!--<mat-radio-group aria-label="Select an option">-->
+<!--    <mat-radio-button class="option" value="unpublished">Unpublished</mat-radio-button>-->
+<!--    <mat-radio-button class="option" value="published">Published</mat-radio-button>-->
+<!--</mat-radio-group>-->
+<mat-divider class="option-list-divider"></mat-divider>
+<div mat-dialog-content>
+    <div *ngIf="uploading">
+        <fa-icon [icon]="'spinner'" [spin]="true"></fa-icon>
+    </div>
+    <ng-container *ngIf="!imgLink && !uploading">
+        <h4>Select a File</h4>
+        <div class="input-group">
+            <div class="form-group">
+                <!--                <label for="import_file">Choose File</label>-->
+                <input type="file" id="import_file"
+                       *ngIf="uploader.queue.length==0 && !uploading"
+                       ng2FileSelect
+                       [uploader]="uploader"
+                       (onFileSelected)="onFileSelected($event)"
+                >
+            </div>
+        </div>
+        <br>
+        <h3>Paste a File</h3>
+        <p>You can use the paste command to paste any image here</p>
+    </ng-container>
+    <div *ngIf="imgLink">
+        <img *ngIf="imgLink" [src]="imgLink"/>
+    </div>
+    <div *ngIf="error">
+        <div class="alert alert-danger">
+            {{error}}
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button [disabled]="!imgLink || uploading" (click)="close()">Attach</button>
+</div>

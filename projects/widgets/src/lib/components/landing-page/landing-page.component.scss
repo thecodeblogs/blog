@@ -1,0 +1,9 @@
+.landing-page {
+  min-height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px);
+}
+@media screen and (max-height: 560px) {
+  .landing-page {
+    max-height: calc(100vh);
+  }
+}

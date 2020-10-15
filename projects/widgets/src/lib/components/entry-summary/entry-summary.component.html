@@ -1,0 +1,49 @@
+
+<div class="entry section restrict">
+    <h2>{{entry?.title}}</h2>
+    <!--    <a href="javascript:void(0)" (click)="edit(entry)"><h6>[Edit]</h6></a>-->
+    <h3>Posted {{entry?.create_date.toString() | timeAgo}} on {{entry?.create_date?.getMonth() + 1}}/{{entry?.create_date?.getDate()}}/{{entry?.create_date?.getFullYear()}}</h3>
+    <h5 *ngIf="entry.showEditInformation()">Article was last edited {{entry?.edit_date.toString() | timeAgo}}</h5>
+    <br>
+
+    <ng-container *ngFor="let section of entry?.sections.slice(0, 1)">
+        <h4>{{section?.subheading}}</h4>
+        <ng-container *ngFor="let content of section?.contents.slice(0, 1)">
+            <ng-container [ngSwitch]="content.type">
+                <ng-container *ngSwitchCase="ContentType.CODE">
+                    <pre><code class="language-ts">{{content?.value}}</code></pre>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.URL">
+                    <a [href]="content?.value" target="_blank">{{content.title}}</a>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.IMAGE">
+                    <div class="restrict">
+                        <div class="image">
+                            <img [src]="content?.value"/>
+                        </div>
+                        <div class="description" *ngIf="content?.description">{{content?.description}}</div>
+                        <div class="source" *ngIf="content?.source">
+                            <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.MEDIA">
+                    <div class="restrict">
+                        <div class="image">
+                            <img [src]="content?.value"/>
+                        </div>
+                        <div class="description" *ngIf="content?.description">{{content?.description}}</div>
+                        <div class="source" *ngIf="content?.source">
+                            <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    <p>{{content?.value}}</p>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <a href="javascript:void(0);" (click)="routeTo(entry)">Read more...</a>
+</div>

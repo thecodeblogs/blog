@@ -1,0 +1,168 @@
+<div class="section creator fields">
+    <form #createForm="ngForm" (change)="onChange()">
+        <div class="form-group">
+            <mat-form-field class="full-width">
+                <mat-label>Title</mat-label>
+                <input matInput
+                       [(ngModel)]="entry.title"
+                       name="title">
+            </mat-form-field>
+        </div>
+        <mat-card class="form-section tags">
+            <div>
+                <mat-form-field class="full-width">
+                    <mat-chip-list #tagList aria-label="Tags">
+                        <mat-chip
+                            *ngFor="let tag of tags"
+                            [selectable]="selectable"
+                            [removable]="removable"
+                            (removed)="remove(tag)">
+                            {{tag}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input
+                            matInput
+                            placeholder="Tags..."
+                            #tagInput
+                            [formControl]="tagCtrl"
+                            [matAutocomplete]="tagauto"
+                            [matChipInputFor]="tagList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #tagauto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let tag of filtered_tags | async" [value]="tag">
+                            {{tag}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </mat-card>
+        <mat-card class="form-section" *ngFor="let section of entry.sections">
+            <div>
+                <mat-form-field class="full-width">
+                    <mat-label>Subheading</mat-label>
+                    <input matInput
+                           [(ngModel)]="section.subheading"
+                           name="{{section.id}}-subheading">
+                </mat-form-field>
+                <div class="form-content" *ngFor="let content of section.contents">
+                    <div class="form-group">
+                        <mat-radio-group
+                            aria-label="Select the Content Type"
+                            name="{{content.id}}-content-type"
+                            class="radio-group"
+                            [(ngModel)]="content.type">
+                            <mat-radio-button
+                                *ngFor="let value of Object.values(ContentType)"
+                                class="radio-button"
+                                [value]="value">{{value}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <ng-container [ngSwitch]="content.type">
+                        <ng-container *ngSwitchCase="ContentType.URL">
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <input
+                                    matInput
+                                    name="{{content.id}}-content-value"
+                                    [(ngModel)]="content.value">
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <mat-label>Title</mat-label>
+                                <input
+                                    matInput
+                                    name="{{content.id}}-content-title"
+                                    [(ngModel)]="content.title">
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="ContentType.TEXT">
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <textarea matInput
+                                          cdkTextareaAutosize
+                                          #autosize="cdkTextareaAutosize"
+                                          cdkAutosizeMinRows="3"
+                                          cdkAutosizeMaxRows="20"
+                                          name="{{content.id}}-content-value"
+                                          [(ngModel)]="content.value"
+                                          ></textarea>
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="ContentType.CODE">
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <textarea matInput
+                                          cdkTextareaAutosize
+                                          #autosize="cdkTextareaAutosize"
+                                          cdkAutosizeMinRows="10"
+                                          cdkAutosizeMaxRows="100"
+                                          name="{{content.id}}-content-value"
+                                          [(ngModel)]="content.value"
+                                          ></textarea>
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="ContentType.IMAGE">
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <input
+                                    matInput
+                                    name="{{content.id}}-content-value"
+                                    [(ngModel)]="content.value">
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <input
+                                    matInput
+                                    name="{{content.id}}-content-source"
+                                    [(ngModel)]="content.value">
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <mat-label>Description</mat-label>
+                                <input
+                                    matInput
+                                    name="{{content.id}}-content-description"
+                                    [(ngModel)]="content.description">
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="ContentType.MEDIA">
+                            <div class="full-width">
+                                <ng-container *ngIf="content.value">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Value</mat-label>
+                                        <input
+                                            matInput
+                                            name="{{content.id}}-content-value"
+                                            [(ngModel)]="content.value">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container *ngIf="!content.value">
+                                    <button mat-raised-button (click)=startUploader(content)>Upload</button>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <button mat-raised-button (click)=removeContent(content)>Remove Content</button>
+                    <button mat-raised-button (click)="addContent(section)">+ Add Content</button>
+                </div>
+                <button mat-raised-button (click)="removeSection(section)">Remove Section</button>
+                <button mat-raised-button (click)="addContent(section)" *ngIf="section.contents.length === 0">+ Add
+                    Content
+                </button>
+                <button mat-raised-button (click)="addSection()">+ Add Section</button>
+            </div>
+
+        </mat-card>
+        <button mat-raised-button (click)="addSection()" *ngIf="entry.sections?.length === 0">+ Add Section</button>
+        <button mat-raised-button (click)="addSection()" *ngIf="!entry.sections">+ Add Section</button>
+    </form>
+    <div class="controls">
+        <button mat-raised-button (click)="resetDate()">Reset the Date</button>
+        <button mat-raised-button (click)="publish()">Publish</button>
+        <button mat-raised-button (click)="startNew()">New</button>
+    </div>
+    <div class="controls">
+        <button mat-raised-button (click)="seeEntries()">See Entries</button>
+    </div>
+</div>

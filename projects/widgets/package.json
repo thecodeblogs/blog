@@ -1,11 +1,14 @@
 {
   "name": "@thecodeblogs/blog/widgets",
   "version": "0.3.0",
+  "private": true,
   "dependencies": {
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "^9.0.7",
-    "@angular/core": "^9.0.7"
+    "@angular/common": "^10.1.5",
+    "@angular/core": "^10.1.5",
+    "@angular/cdk": "~10.2.4",
+    "@angular/material": "~10.2.4"
   }
 }

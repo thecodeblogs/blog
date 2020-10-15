@@ -1,0 +1,80 @@
+<div>
+    <h2>{{entry?.title}}</h2>
+    <a *ngIf="me?.id === entry?.getProp('author_id')" href="javascript:void(0)" (click)="edit(entry)"><h4>[Edit]</h4></a>
+    <h3>Posted {{entry?.create_date.toString() | timeAgo}} on {{entry?.create_date?.getMonth() + 1}}/{{entry?.create_date?.getDate()}}/{{entry?.create_date?.getFullYear()}}</h3>
+    <h5 *ngIf="entry?.showEditInformation()">Article was last edited {{entry?.edit_date.toString() | timeAgo}}</h5>
+    <br>
+    <p *ngIf="entry?.tags?.length > 0">Tags: <span *ngFor="let tag of entry?.tags; let last = last">{{tag}}<ng-container *ngIf="!last"> | </ng-container></span></p>
+
+    <ng-container *ngFor="let section of entry?.sections">
+        <h4>{{section?.subheading}}</h4>
+        <ng-container *ngFor="let content of section?.contents">
+            <ng-container [ngSwitch]="content.type">
+                <ng-container *ngSwitchCase="ContentType.CODE">
+                    <pre><code class="language-ts">{{content?.value}}</code></pre>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.URL">
+                    <a [href]="content?.value" target="_blank">{{content.title}}</a>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.IMAGE">
+                    <div class="restrict">
+                        <div class="image">
+                            <img [src]="content?.value"/>
+                        </div>
+                        <div class="description" *ngIf="content?.description">{{content?.description}}</div>
+                        <div class="source" *ngIf="content?.source">
+                            <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="ContentType.MEDIA">
+                    <div class="restrict">
+                        <div class="image">
+                            <img [src]="content?.value"/>
+                        </div>
+                        <div class="description" *ngIf="content?.description">{{content?.description}}</div>
+                        <div class="source" *ngIf="content?.source">
+                            <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    <p>{{content?.value}}</p>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container>
+        <h2>Comments</h2>
+        <p *ngIf="comments?.length == 0">There are no comments yet.</p>
+        <ng-container *ngIf="comments?.length > 0">
+            <div *ngFor="let comment of comments">
+                <mat-card style="margin-bottom: 20px;" class="restrict">
+                    <mat-card-title><img class="gravatar" src="{{comment.gravatar_url}} + ?s=30"> {{comment.user_display_name}}</mat-card-title>
+                    <mat-card-subtitle>{{comment.date_obj | timeAgo}}</mat-card-subtitle>
+                    <mat-card-content>
+                        <p>{{comment.content}}</p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!me">
+        <a href="/signup">Signup</a> or <a href="/login">login</a> to join the conversation!
+    </ng-container>
+    <ng-container *ngIf="me">
+        <h2 style="width: 100%;">Leave a Comment</h2>
+        <br>
+        <mat-form-field class="restrict" style="width: 100%;" appearance="outline">
+            <mat-label>Comment</mat-label>
+            <textarea [(ngModel)]="commentText" (keydown.enter)="postComment($event)" matInput></textarea>
+        </mat-form-field>
+        <br>
+        <button (click)="postComment($event)" style="text-align: right;" mat-button>Submit</button>
+    </ng-container>
+    <ng-container *ngIf="me && !me?.comments_public">
+        <p>Note, your comments will not be public be default. It is possible I will make your comments public, but for now comments are just between you and me.</p>
+    </ng-container>
+    <div style="margin-bottom: 30px;"></div>
+</div>
+

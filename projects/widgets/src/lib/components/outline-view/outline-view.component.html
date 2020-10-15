@@ -1,0 +1,17 @@
+<div class="section outline">
+    <h1 *ngIf="entry?.sections?.length === 0">Outline View</h1>
+    <div cdkDropList class="sections" (cdkDropListDropped)="sectionDrop($event)">
+        <mat-card class="card" cdkDrag *ngFor="let section of entry.sections">
+            <h3>Section {{Math.ceil(section.order / 10) + 1}}</h3>
+            {{section.subheading}}
+            <div cdkDropList class="contents" (cdkDropListDropped)="contentDrop($event, section)">
+                <h3>Contents for {{section.subheading}}</h3>
+                <div class="content-card" *ngFor="let content of section.contents" cdkDrag>
+                    <div class="content">{{content.value}}</div>
+                    <div class="content-placeholder" *cdkDragPlaceholder></div>
+                </div>
+            </div>
+        </mat-card>
+        <div class="custom-placeholder" *cdkDragPlaceholder></div>
+    </div>
+</div>

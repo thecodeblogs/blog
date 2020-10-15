@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Select an Entry to Edit</h1>
+<!--<mat-radio-group aria-label="Select an option">-->
+<!--    <mat-radio-button class="option" value="unpublished">Unpublished</mat-radio-button>-->
+<!--    <mat-radio-button class="option" value="published">Published</mat-radio-button>-->
+<!--</mat-radio-group>-->
+<mat-divider class="option-list-divider"></mat-divider>
+<div mat-dialog-content>
+    <mat-radio-group [(ngModel)]="selectedId">
+        <mat-radio-button *ngFor="let entry of entries" class="option" [value]="entry.id">{{entry.title}}</mat-radio-button>
+    </mat-radio-group>
+    <div *ngIf="!entries?.length">There are no unpublished entries</div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="onYesClick()" [mat-dialog-close]="this.selectedId" cdkFocusInitial>Edit Selected Entry</button>
+</div>

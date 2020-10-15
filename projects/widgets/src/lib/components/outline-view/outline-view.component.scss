@@ -1,0 +1,38 @@
+.outline {
+  padding: 0 20px 0 20px;
+}
+
+.content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.card {
+  margin: 4px;
+  cursor: pointer;
+}
+
+.content-card {
+  margin: 4px;
+  cursor: pointer;
+}
+
+.content-card:not(:last-child) {
+  border-bottom: 1px dotted #aaa;
+}
+
+.custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  min-height: 60px;
+
+}
+.content-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  min-height: 30px;
+}
