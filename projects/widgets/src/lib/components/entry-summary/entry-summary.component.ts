@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Entry} from '@thecodeblogs/blog/core/data/entry';
-import {ContentType} from '@thecodeblogs/blog/core/data/content-type';
+import {Entry, ContentType} from '@thecodeblogs/blog/core';
 import {Router} from '@angular/router';
 
 @Component({

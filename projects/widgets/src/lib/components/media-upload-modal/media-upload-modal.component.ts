@@ -1,16 +1,14 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit, OnDestroy} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DjangoRestFrameworkEndpointService} from '@thecodeblogs/blog/core/services/django-rest-framework-endpoint.service';
-import {UploadService} from '@thecodeblogs/blog/core/services/upload.service';
+import {DjangoRestFrameworkEndpointService, UploadService} from '@thecodeblogs/blog/core';
 
 @Component({
     selector: 'app-media-upload-modal',
     templateUrl: './media-upload-modal.component.html',
     styleUrls: ['./media-upload-modal.component.css']
 })
-export class MediaUploadModalComponent implements OnInit {
+export class MediaUploadModalComponent implements OnInit, OnDestroy {
 
     imgLink;
     socketSub;

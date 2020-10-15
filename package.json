@@ -21,6 +21,7 @@
         "@angular/router": "~10.1.5",
         "@angular/cdk": "~10.2.4",
         "@angular/material": "~10.2.4",
+        "autolinker": "^3.12.0",
         "ng2-file-upload": "^1.4.0",
         "prismjs": "^1.19.0",
         "slugify": "^1.4.0",

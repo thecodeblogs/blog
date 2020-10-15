@@ -9,6 +9,7 @@
     "@angular/common": "^10.1.5",
     "@angular/core": "^10.1.5",
     "@angular/cdk": "~10.2.4",
-    "@angular/material": "~10.2.4"
+    "@angular/material": "~10.2.4",
+    "autolinker": "^3.12.0"
   }
 }
