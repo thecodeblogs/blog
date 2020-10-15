@@ -20,10 +20,7 @@
         ],
         "paths": {
             "@thecodeblogs/blog/core": [
-                "./projects/core/src/public-api"
-            ],
-            "@thecodeblogs/blog/widgets": [
-                "./projects/widgets/src/public-api"
+                "projects/core/src/public-api.ts"
             ],
             "core": [
                 "dist/core/core",

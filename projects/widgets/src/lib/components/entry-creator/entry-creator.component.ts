@@ -1,19 +1,12 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Entry} from '@thecodeblogs/blog/core/data/entry';
-import {Section} from '@thecodeblogs/blog/core/data/section';
-import {Content} from '@thecodeblogs/blog/core/data/content';
+import {Entry, Section, Content, ContentType, IdentityService, Identity, EntryService} from '@thecodeblogs/blog/core';
 import {filter} from 'lodash';
-import { ContentType } from '@thecodeblogs/blog/core/data/content-type';
 import {MatDialog} from '@angular/material/dialog';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {EntrySelectorDialogComponent} from '@thecodeblogs/blog-widgets/components/entry-selector-dialog/entry-selector-dialog.component';
-import {IdentityService} from '@thecodeblogs/blog/core/services/identity.service';
-import {Identity} from '@thecodeblogs/blog/core/data/identity';
-import {EntryService} from '@thecodeblogs/blog/core/services/entry.service';
+import {EntrySelectorDialogComponent} from '../../components/entry-selector-dialog/entry-selector-dialog.component';
 import {FileUploader} from 'ng2-file-upload';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {MediaUploadModalComponent} from '@thecodeblogs/blog-widgets/components/media-upload-modal/media-upload-modal.component';
+import {MediaUploadModalComponent} from '../../components/media-upload-modal/media-upload-modal.component';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
@@ -94,7 +87,6 @@ export class EntryCreatorComponent implements OnInit {
         private identityService: IdentityService,
         private cdr: ChangeDetectorRef,
         private dialog: MatDialog,
-        private modalService: NgbModal,
     ) {
         this.filtered_tags = this.tagCtrl.valueChanges.pipe(
             startWith(null),
