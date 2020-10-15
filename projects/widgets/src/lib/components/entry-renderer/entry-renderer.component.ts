@@ -1,14 +1,14 @@
 import {AfterViewChecked, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {orderBy} from 'lodash';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {PrismService} from '@thecodeblogs/blog-core/services/prism.service';
-import {Entry} from '@thecodeblogs/blog-core/data/entry';
-import {ContentType} from '@thecodeblogs/blog-core/data/content-type';
-import {IdentityService} from '@thecodeblogs/blog-core/services/identity.service';
-import {Identity} from '@thecodeblogs/blog-core/data/identity';
-import {CommentService} from '@thecodeblogs/blog-core/services/comment.service';
+import {PrismService} from '@thecodeblogs/blog/core/services/prism.service';
+import {Entry} from '@thecodeblogs/blog/core/data/entry';
+import {ContentType} from '@thecodeblogs/blog/core/data/content-type';
+import {IdentityService} from '@thecodeblogs/blog/core/services/identity.service';
+import {Identity} from '@thecodeblogs/blog/core/data/identity';
+import {CommentService} from '@thecodeblogs/blog/core/services/comment.service';
 import {EntryCreatorComponent} from '@thecodeblogs/blog-widgets/components/entry-creator/entry-creator.component';
-import {EntryService} from '@thecodeblogs/blog-core/services/entry.service';
+import {EntryService} from '@thecodeblogs/blog/core/services/entry.service';
 
 @Component({
     selector: 'app-entry-renderer',
