@@ -1,7 +1,17 @@
 import {AfterViewChecked, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {orderBy} from 'lodash';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {PrismService, Entry, ContentType, IdentityService, Identity, CommentService, EntryService} from '@thecodeblogs/blog/core';
+
+import {Entry} from '../../data/entry';
+import {ContentType} from '../../data/content-type';
+import {Identity} from '../../data/identity';
+
+import {IdentityService} from '../../services/identity.service';
+import {EntryService} from '../../services/entry.service';
+import {CommentService} from '../../services/comment.service';
+import {PrismService} from '../../services/prism.service';
+
+
 import {EntryCreatorComponent} from '../../components/entry-creator/entry-creator.component';
 
 @Component({

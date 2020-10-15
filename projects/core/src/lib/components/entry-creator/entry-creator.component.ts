@@ -1,6 +1,15 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Entry, Section, Content, ContentType, IdentityService, Identity, EntryService} from '@thecodeblogs/blog/core';
+
+import {Entry} from '../../data/entry';
+import {Section} from '../../data/section';
+import {Content} from '../../data/content';
+import {ContentType} from '../../data/content-type';
+import {Identity} from '../../data/identity';
+
+import {EntryService} from '../../services/entry.service';
+import {IdentityService} from '../../services/identity.service';
+
 import {filter} from 'lodash';
 import {MatDialog} from '@angular/material/dialog';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
@@ -39,6 +48,7 @@ export class EntryCreatorComponent implements OnInit {
     tagCtrl = new FormControl();
 
     tag_to_add: string;
+    selectable = false;
 
     public uploader: FileUploader = new FileUploader(
         {

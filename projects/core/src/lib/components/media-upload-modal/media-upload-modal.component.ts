@@ -1,7 +1,9 @@
 import {Component, HostListener, Input, OnInit, OnDestroy} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DjangoRestFrameworkEndpointService, UploadService} from '@thecodeblogs/blog/core';
+
+import {DjangoRestFrameworkEndpointService} from '../../services/django-rest-framework-endpoint.service';
+import {UploadService} from '../../services/upload.service';
 
 @Component({
     selector: 'app-media-upload-modal',

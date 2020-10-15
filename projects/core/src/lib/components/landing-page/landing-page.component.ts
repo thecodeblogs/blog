@@ -1,7 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {map} from 'lodash';
-import {Entry, EntryService} from '@thecodeblogs/blog/core';
+
+import {Entry} from '../../data/entry';
+import {EntryService} from '../../services/entry.service';
 
 @Component({
     selector: 'app-landing-page',

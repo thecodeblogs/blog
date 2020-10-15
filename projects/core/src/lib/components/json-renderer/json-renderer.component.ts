@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Entry, EntryService} from '@thecodeblogs/blog/core';
+import {Entry} from '../../data/entry';
+import {EntryService} from '../../services/entry.service';
 
 @Component({
     selector: 'app-json-renderer',

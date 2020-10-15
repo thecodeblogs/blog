@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Entry, ContentType} from '@thecodeblogs/blog/core';
 import {Router} from '@angular/router';
+import {Entry} from '../../data/entry';
+import {ContentType} from '../../data/content-type';
 
 @Component({
     selector: 'app-entry-summary',

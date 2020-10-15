@@ -1,8 +1,13 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {Entry, Identity, IdentityService, EntryService} from '@thecodeblogs/blog/core';
 import {Router} from '@angular/router';
 import {filter} from 'lodash';
 import {map} from 'lodash';
+
+import {Entry} from '../../data/entry';
+import {Identity} from '../../data/identity';
+
+import {EntryService} from '../../services/entry.service';
+import {IdentityService} from '../../services/identity.service';
 
 @Component({
     selector: 'app-side-navigation',

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EntrySelectorDialogData} from '../../components/entry-selector-dialog/entry-selector-dialog-data';
-import {EntryService} from '@thecodeblogs/blog/core';
+import {EntryService} from '../../services/entry.service';
 
 @Component({
     selector: 'app-entry-selector-dialog',
