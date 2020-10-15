@@ -19,16 +19,9 @@
             "dom"
         ],
         "paths": {
-            "@thecodeblogs/blog/core": [
-                "projects/core/src/public-api.ts"
-            ],
             "core": [
                 "dist/core/core",
                 "dist/core"
-            ],
-            "widgets": [
-                "dist/widgets/widgets",
-                "dist/widgets"
             ]
         }
     },
