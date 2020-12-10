@@ -4,6 +4,6 @@ export class Base {
     id: string;
 
     constructor() {
-        this.id = Guid.newGuid();
+        this.id = new Guid().newGuid();
     }
 }

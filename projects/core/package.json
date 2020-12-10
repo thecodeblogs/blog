@@ -1,15 +1,14 @@
 {
-  "name": "@thecodeblogs/blog/core",
-  "version": "0.3.0",
-  "private": true,
+  "name": "@thecodeblogs/blog",
+  "version": "0.4.0",
   "dependencies": {
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "^9.0.7",
-    "@angular/core": "^9.0.7",
-    "@angular/cdk": "~10.2.4",
-    "@angular/material": "~10.2.4",
+    "@angular/common": "^10.1.5",
+    "@angular/core": "^10.1.5",
+    "@angular/cdk": "^10.2.4",
+    "@angular/material": "^10.2.4",
     "@fortawesome/angular-fontawesome": "^0.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
