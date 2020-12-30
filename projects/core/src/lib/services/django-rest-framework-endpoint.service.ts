@@ -1,8 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {ListResponse} from '../data/list-response';
+import {CoreEvent} from '../data/core-event';
+import {CoreEventType} from '../data/core-event-type.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +15,13 @@ export class DjangoRestFrameworkEndpointService<T> {
     ) {
     }
 
+    events = new EventEmitter<CoreEvent<T>>();
     endpoint = '';
+
+    triggerCoreEvent(obj: T, type: CoreEventType) {
+        this.events.next(new CoreEvent(obj, type));
+        return obj;
+    }
 
     handleResponse(obj: T) {
         return obj;
@@ -34,16 +42,19 @@ export class DjangoRestFrameworkEndpointService<T> {
     }
     create(entity: T): Observable<T> {
         return this.http.post<T>(this.endpoint, entity).pipe(
+            map((val) => this.triggerCoreEvent(val, CoreEventType.CREATE)),
             map(this.handleResponse.bind(this))
         );
     }
     delete(entity: T): Observable<T> {
         return this.http.delete<T>(this.endpoint + (entity as any).id + '/').pipe(
+            map((val) => this.triggerCoreEvent(val, CoreEventType.DELETE)),
             map(this.handleResponse.bind(this))
         );
     }
     update(entity: T): Observable<T> {
         return this.http.patch<T>(this.endpoint + (entity as any).id + '/', entity).pipe(
+            map((val) => this.triggerCoreEvent(val, CoreEventType.UPDATE)),
             map(this.handleResponse.bind(this))
         );
     }

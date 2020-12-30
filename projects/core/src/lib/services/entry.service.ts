@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {DjangoRestFrameworkEndpointService} from '../services/django-rest-framework-endpoint.service';
 import {ListResponse} from '../data/list-response';
 import {Entry} from '../data/entry';
@@ -6,6 +6,8 @@ import {Observable, Subject} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
 import {loMap} from 'lodash';
 import {HttpClient} from '@angular/common/http';
+import {CoreEvent} from '../data/core-event';
+import {CoreEventType} from '../data/core-event-type.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +41,10 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
         super(http);
         this.sub = this.currentlyEditedEntry.pipe(debounceTime(3000)).subscribe((e) => {
             e.edit_date = new Date();
-            this.http.patch(this.endpoint + e.id + '/?published=false', e).subscribe((response) => {
+            this.http.patch(this.endpoint + e.id + '/?published=false', e).pipe(
+                map(this.handleResponse.bind(this))
+            ).subscribe((response) => {
+                this.triggerCoreEvent((response as Entry), CoreEventType.UPDATE);
                 console.log('Synced ' + e.id + '...');
             }, (err) => {
                 console.log('Error encountered syncing ' + e.id);
@@ -69,6 +74,7 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
     }
     updateUnpublishedEntry(entry: Entry): Observable<Entry> {
         return this.http.patch<Entry>(this.endpoint + entry.id + '/?published=false', entry).pipe(
+            map((val) => this.triggerCoreEvent(val, CoreEventType.UPDATE)),
             map(this.handleResponse.bind(this))
         );
     }

@@ -1,5 +1,5 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, EventEmitter, Output} from '@angular/core';
 
 import {Entry} from '../../data/entry';
 import {Section} from '../../data/section';

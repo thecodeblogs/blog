@@ -10,6 +10,8 @@ export * from './lib/data/guid';
 export * from './lib/data/identity';
 export * from './lib/data/list-response';
 export * from './lib/data/section';
+export * from './lib/data/core-event';
+export * from './lib/data/core-event-type.enum';
 
 export * from './lib/services/comment.service';
 export * from './lib/services/django-rest-framework-endpoint.service';
