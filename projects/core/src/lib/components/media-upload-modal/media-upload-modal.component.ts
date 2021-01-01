@@ -12,20 +12,7 @@ import {UploadService} from '../../services/upload.service';
 })
 export class MediaUploadModalComponent implements OnInit, OnDestroy {
 
-    imgLink;
-    socketSub;
-    error;
-    public uploader: FileUploader = new FileUploader(
-        {
-            url: UploadService.upload_endpoint,
-            itemAlias: 'file',
-            authToken: '',
-            headers: [
-                {name: 'X-CSRFToken', value: MediaUploadModalComponent.getCookie('csrftoken')},
-            ],
-            additionalParameter: {'csrf_token': MediaUploadModalComponent.getCookie('csrftoken')},
-            removeAfterUpload: true,
-            allowedMimeType: [
+    @Input() allowedMimeTypes = [
                 'image/jpeg',
                 'image/gif',
                 'image/png',
@@ -33,12 +20,32 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
                 'video/mp4',
                 'video/webm',
                 'video/ogg',
-            ],
-        }
-    )
+    ];
+
+    imgLink;
+    socketSub;
+    error;
+    public uploader: FileUploader;
     uploadId;
     uploading = false;
     @Input() file;
+
+    poller;
+
+    static getCookie(name: string) {
+        const ca: Array<string> = document.cookie.split(';');
+        const caLen: number = ca.length;
+        const cookieName = `${name}=`;
+        let c: string;
+
+        for (let i = 0; i < caLen; i += 1) {
+            c = ca[i].replace(/^\s+/g, '');
+            if (c.indexOf(cookieName) === 0) {
+                return c.substring(cookieName.length, c.length);
+            }
+        }
+        return '';
+    }
 
     constructor(
         public dialogRef: MatDialogRef<MediaUploadModalComponent>,
@@ -46,11 +53,10 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    poller;
 
     pollForCompletion() {
         this.uploadService.get(this.uploadId).subscribe((response) => {
-            if(response.processed) {
+            if (response.processed) {
                 this.imgLink = response.path_to_file;
                 clearInterval(this.poller);
                 this.poller = null;
@@ -59,35 +65,36 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    static getCookie(name: string) {
-        let ca: Array<string> = document.cookie.split(';');
-        let caLen: number = ca.length;
-        let cookieName = `${name}=`;
-        let c: string;
-
-        for (let i: number = 0; i < caLen; i += 1) {
-            c = ca[i].replace(/^\s+/g, '');
-            if (c.indexOf(cookieName) == 0) {
-                return c.substring(cookieName.length, c.length);
-            }
-        }
-        return '';
-    }
 
     ngOnInit(): void {
+
+        this.uploader = new FileUploader(
+            {
+                url: UploadService.upload_endpoint,
+                itemAlias: 'file',
+                authToken: '',
+                headers: [
+                    {name: 'X-CSRFToken', value: MediaUploadModalComponent.getCookie('csrftoken')},
+                ],
+                additionalParameter: {csrf_token: MediaUploadModalComponent.getCookie('csrftoken')},
+                removeAfterUpload: true,
+                allowedMimeType: this.allowedMimeTypes,
+            }
+        );
+
         this.uploader.onCompleteItem = (item, response) => {
-            const responseObj = JSON.parse(response)
+            const responseObj = JSON.parse(response);
             this.uploadId = responseObj.id;
             this.poller = setInterval(this.pollForCompletion.bind(this), 2000);
-        }
+        };
 
         this.uploader.onWhenAddingFileFailed = (item, filter, options) => {
-            this.error = 'This file is not a supported mimetype.'
+            this.error = 'This file is not a supported mimetype.';
             this.uploading = false;
-        }
+        };
 
         if (this.file) {
-            this.uploader.addToQueue([this.file])
+            this.uploader.addToQueue([this.file]);
             this.uploader.uploadAll();
             this.uploading = true;
         }
@@ -114,7 +121,7 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
     }
 
     blobToFile(theBlob, fileName) {
-        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        // A Blob() is almost a File() - it's just missing the two properties below which we will add
         theBlob.lastModifiedDate = new Date();
         theBlob.name = fileName;
         return theBlob;
@@ -123,7 +130,7 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
     @HostListener('document:paste', ['$event'])
     onPaste(e) {
         if (e instanceof ClipboardEvent) {
-            const files = e.clipboardData.files
+            const files = e.clipboardData.files;
             if (files) {
                 if (files.length < 1) {
                     // const items = e.clipboardData.items;
@@ -148,16 +155,16 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
                     //     });
                     // }
                 } else if (files.length > 1) {
-                    console.log('Multiple files detected')
+                    console.log('Multiple files detected');
                 } else {
                     for (let i = 0; i < files.length; i++) {
-                        this.uploader.addToQueue([files[i]])
+                        this.uploader.addToQueue([files[i]]);
                     }
                     this.uploader.uploadAll();
                     this.uploading = true;
                 }
             } else {
-                console.log('Stuff not working')
+                console.log('Stuff not working');
             }
         }
     }

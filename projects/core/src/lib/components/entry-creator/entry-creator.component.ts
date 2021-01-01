@@ -1,5 +1,5 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input} from '@angular/core';
 
 import {Entry} from '../../data/entry';
 import {Section} from '../../data/section';
@@ -50,6 +50,16 @@ export class EntryCreatorComponent implements OnInit {
     tag_to_add: string;
     selectable = false;
 
+    @Input() allowedMimeTypes = [
+                'image/jpeg',
+                'image/gif',
+                'image/png',
+                'image/jpg',
+                'video/mp4',
+                'video/webm',
+                'video/ogg',
+    ];
+
     public uploader: FileUploader = new FileUploader(
         {
             url: '/file_api/uploads/create_image/',
@@ -65,15 +75,7 @@ export class EntryCreatorComponent implements OnInit {
                 'csrf_token': EntryCreatorComponent.getCookie('csrftoken')
             },
             removeAfterUpload: true,
-            allowedMimeType: [
-                'image/jpeg',
-                'image/gif',
-                'image/png',
-                'image/jpg',
-                'video/mp4',
-                'video/webm',
-                'video/ogg',
-            ],
+            allowedMimeType: this.allowedMimeTypes,
         }
     );
 
@@ -175,6 +177,7 @@ export class EntryCreatorComponent implements OnInit {
     startUploader(content) {
         const dialogRef = this.dialog.open(MediaUploadModalComponent, {
         });
+        dialogRef.componentInstance.allowedMimeTypes = this.allowedMimeTypes;
         dialogRef.afterClosed().subscribe(() => {
             content.value = dialogRef.componentInstance.imgLink;
         });
