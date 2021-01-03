@@ -136,6 +136,26 @@
                                             name="{{content.id}}-content-value"
                                             [(ngModel)]="content.value">
                                     </mat-form-field>
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Description</mat-label>
+                                        <input
+                                            matInput
+                                            name="{{content.id}}-content-description"
+                                            [(ngModel)]="content.description">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container *ngIf="content.additional">
+                                    <ng-container *ngFor="let add of content.additional">
+                                        <mat-form-field class="full-width">
+                                            <mat-label>{{add.key}}</mat-label>
+                                            <input
+                                                matInput
+                                                name="{{content.id}}-content-{{add.key}}"
+                                                [(ngModel)]="add.value"
+                                                [disabled]="true"
+                                                >
+                                        </mat-form-field>
+                                    </ng-container>
                                 </ng-container>
                                 <ng-container *ngIf="!content.value">
                                     <button mat-raised-button (click)=startUploader(content)>Upload</button>

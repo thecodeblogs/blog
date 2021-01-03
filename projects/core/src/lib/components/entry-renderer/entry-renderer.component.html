@@ -27,17 +27,26 @@
                         </div>
                     </div>
                 </ng-container>
+
                 <ng-container *ngSwitchCase="ContentType.MEDIA">
-                    <div class="restrict">
-                        <div class="image">
-                            <img [src]="content?.value"/>
+                    <ng-container *ngIf="mediaIsZip(content)">
+                        <div class="download">
+                            <a href="content?.value">{{content?.description}}</a>
                         </div>
-                        <div class="description" *ngIf="content?.description">{{content?.description}}</div>
-                        <div class="source" *ngIf="content?.source">
-                            <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                    </ng-container>
+                    <ng-container *ngIf="!mediaIsZip(content)">
+                        <div class="restrict">
+                            <div class="image">
+                                <img [src]="content?.value"/>
+                            </div>
+                            <div class="description" *ngIf="content?.description">{{content?.description}}</div>
+                            <div class="source" *ngIf="content?.source">
+                                <a [href]="content?.source" [target]="'_blank'">Source: {{content?.source}}</a>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
                 </ng-container>
+
                 <ng-container *ngSwitchDefault>
                     <p>{{content?.value}}</p>
                 </ng-container>

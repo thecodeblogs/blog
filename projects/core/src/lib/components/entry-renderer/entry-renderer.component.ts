@@ -3,6 +3,7 @@ import {orderBy} from 'lodash';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 
 import {Entry} from '../../data/entry';
+import {Content} from '../../data/content';
 import {ContentType} from '../../data/content-type';
 import {Identity} from '../../data/identity';
 
@@ -85,6 +86,15 @@ export class EntryRendererComponent implements OnInit, AfterViewChecked {
                 this.comments.push(comment);
             });
             this.commentText = '';
+        }
+    }
+    mediaIsZip(content: Content) {
+        if (content.additional) {
+            for (const add of content.additional) {
+                if (add.key === Content.KEY_MIMETYPE) {
+                    return add.value === 'application/zip';
+                }
+            }
         }
     }
 }

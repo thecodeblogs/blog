@@ -180,6 +180,8 @@ export class EntryCreatorComponent implements OnInit {
         dialogRef.componentInstance.allowedMimeTypes = this.allowedMimeTypes;
         dialogRef.afterClosed().subscribe(() => {
             content.value = dialogRef.componentInstance.imgLink;
+            content.additional = [];
+            content.additional.push({key: Content.KEY_MIMETYPE, value: dialogRef.componentInstance.mimeType});
         });
     }
 

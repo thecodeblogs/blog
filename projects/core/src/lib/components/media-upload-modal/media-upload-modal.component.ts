@@ -23,6 +23,7 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
     ];
 
     imgLink;
+    mimeType;
     socketSub;
     error;
     public uploader: FileUploader;
@@ -58,6 +59,7 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
         this.uploadService.get(this.uploadId).subscribe((response) => {
             if (response.processed) {
                 this.imgLink = response.path_to_file;
+                this.mimeType = response.mime_type;
                 clearInterval(this.poller);
                 this.poller = null;
                 this.uploading = false;
