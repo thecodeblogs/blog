@@ -22,6 +22,8 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
                 'video/ogg',
     ];
 
+    @Input() uploadUrlKey = 'path_to_file';
+
     imgLink;
     mimeType;
     socketSub;
@@ -58,7 +60,7 @@ export class MediaUploadModalComponent implements OnInit, OnDestroy {
     pollForCompletion() {
         this.uploadService.get(this.uploadId).subscribe((response) => {
             if (response.processed) {
-                this.imgLink = response.path_to_file;
+                this.imgLink = response[this.uploadUrlKey];
                 this.mimeType = response.mime_type;
                 clearInterval(this.poller);
                 this.poller = null;

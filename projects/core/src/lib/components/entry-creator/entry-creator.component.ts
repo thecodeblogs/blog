@@ -60,6 +60,8 @@ export class EntryCreatorComponent implements OnInit {
                 'video/ogg',
     ];
 
+    @Input() uploadUrlKey = 'path_to_file';
+
     public uploader: FileUploader = new FileUploader(
         {
             url: '/file_api/uploads/create_image/',
@@ -178,6 +180,7 @@ export class EntryCreatorComponent implements OnInit {
         const dialogRef = this.dialog.open(MediaUploadModalComponent, {
         });
         dialogRef.componentInstance.allowedMimeTypes = this.allowedMimeTypes;
+        dialogRef.componentInstance.uploadUrlKey = this.uploadUrlKey;
         dialogRef.afterClosed().subscribe(() => {
             content.value = dialogRef.componentInstance.imgLink;
             content.additional = [];

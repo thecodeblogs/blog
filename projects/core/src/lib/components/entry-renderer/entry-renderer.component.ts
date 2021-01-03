@@ -88,13 +88,17 @@ export class EntryRendererComponent implements OnInit, AfterViewChecked {
             this.commentText = '';
         }
     }
-    mediaIsZip(content: Content) {
+    mediaIsZip(content: Content): boolean {
+        let mediaIsZip = false;
         if (content.additional) {
             for (const add of content.additional) {
                 if (add.key === Content.KEY_MIMETYPE) {
-                    return add.value === 'application/zip';
+                    if (add.value === 'application/zip') {
+                        mediaIsZip = true;
+                    }
                 }
             }
         }
+        return mediaIsZip;
     }
 }
