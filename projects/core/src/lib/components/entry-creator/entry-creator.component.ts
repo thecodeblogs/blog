@@ -1,4 +1,4 @@
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import {ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input} from '@angular/core';
 
 import {Entry} from '../../data/entry';
@@ -10,7 +10,7 @@ import {Identity} from '../../data/identity';
 import {EntryService} from '../../services/entry.service';
 import {IdentityService} from '../../services/identity.service';
 
-import {filter} from 'lodash';
+import {map as loMap, filter} from 'lodash';
 import {MatDialog} from '@angular/material/dialog';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
 import {EntrySelectorDialogComponent} from '../../components/entry-selector-dialog/entry-selector-dialog.component';
@@ -20,6 +20,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
+import {TagService} from '../../services/tag.service';
 const slugify = require('slugify');
 
 @Component({
@@ -37,7 +38,7 @@ export class EntryCreatorComponent implements OnInit {
     entry: Entry = new Entry();
     me: Identity;
 
-    separatorKeysCodes: number[] = [ENTER, COMMA];
+    separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
     removable = true;
     tags: string[];
     all_tags: string[] = ['Angular', 'Bash', 'MacOS', 'Typescript', 'NPM', 'Databases'];
@@ -98,13 +99,11 @@ export class EntryCreatorComponent implements OnInit {
 
     constructor(
         private entryService: EntryService,
+        private tagService: TagService,
         private identityService: IdentityService,
         private cdr: ChangeDetectorRef,
         private dialog: MatDialog,
     ) {
-        this.filtered_tags = this.tagCtrl.valueChanges.pipe(
-            startWith(null),
-            map((tag: string | null) => tag ? this._filter(tag) : this.all_tags.slice()));
     }
 
     private _filter(value: string): string[] {
@@ -144,6 +143,12 @@ export class EntryCreatorComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.tagService.get().subscribe((response) => {
+            this.all_tags = loMap(response.results, (t) => t.label);
+            this.filtered_tags = this.tagCtrl.valueChanges.pipe(
+                startWith(null),
+                map((tag: string | null) => tag ? this._filter(tag) : this.all_tags.slice()));
+        });
         this.identityService.getMe().subscribe((me) => {
             this.me = me;
         });
