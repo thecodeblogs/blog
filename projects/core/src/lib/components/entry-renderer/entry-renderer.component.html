@@ -4,7 +4,9 @@
     <h3>Posted {{entry?.create_date.toString() | timeAgo}} on {{entry?.create_date?.getMonth() + 1}}/{{entry?.create_date?.getDate()}}/{{entry?.create_date?.getFullYear()}}</h3>
     <h5 *ngIf="entry?.showEditInformation()">Article was last edited {{entry?.edit_date.toString() | timeAgo}}</h5>
     <br>
-    <p *ngIf="entry?.tags?.length > 0">Tags: <span *ngFor="let tag of entry?.tags; let last = last">{{tag}}<ng-container *ngIf="!last"> | </ng-container></span></p>
+    <p *ngIf="entry?.tags?.length > 0">Tags: <span *ngFor="let tag of entry?.tags; let last = last">{{tag}}<ng-container *ngIf="!last"> |
+        </ng-container></span><span *ngIf="entry?.views">, Views: {{entry.views}}</span></p>
+    <br>
 
     <ng-container *ngFor="let section of entry?.sections">
         <h4>{{section?.subheading}}</h4>

@@ -15,6 +15,7 @@ export class Entry extends Base {
     published: boolean;
     publish_date: Date;
     tags: string[];
+    views: number;
 
     constructor(init?: Partial<Entry>) {
         super();

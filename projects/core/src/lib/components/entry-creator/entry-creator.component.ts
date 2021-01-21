@@ -142,13 +142,17 @@ export class EntryCreatorComponent implements OnInit {
         this.tagCtrl.setValue(null);
     }
 
-    ngOnInit() {
+    refreshTags() {
         this.tagService.get().subscribe((response) => {
             this.all_tags = loMap(response.results, (t) => t.label);
             this.filtered_tags = this.tagCtrl.valueChanges.pipe(
                 startWith(null),
                 map((tag: string | null) => tag ? this._filter(tag) : this.all_tags.slice()));
         });
+    }
+
+    ngOnInit() {
+        this.refreshTags();
         this.identityService.getMe().subscribe((me) => {
             this.me = me;
         });
@@ -296,6 +300,8 @@ export class EntryCreatorComponent implements OnInit {
                     JSON.stringify(this.entry)
                 );
                 this.entryService.create(this.entry).subscribe((next) => {
+                    this.tags = [];
+                    this.refreshTags();
                 });
             });
         }
