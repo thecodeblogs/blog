@@ -17,6 +17,8 @@ export class Entry extends Base {
     tags: string[];
     views: number;
 
+    _friendly_views: string;
+
     constructor(init?: Partial<Entry>) {
         super();
         Object.assign(this, init);
@@ -38,6 +40,17 @@ export class Entry extends Base {
         }
         if (!this.tags) {
             this.tags = [];
+        }
+        if (this.views) {
+            if (this.views < 10) {
+                this._friendly_views = 'Less than ten';
+            }
+            if (10 < this.views && this.views < 100) {
+                this._friendly_views = 'Around one hundred';
+            }
+            else {
+                this._friendly_views = this.views.toString();
+            }
         }
     }
 

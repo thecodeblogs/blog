@@ -5,7 +5,7 @@
     <h5 *ngIf="entry?.showEditInformation()">Article was last edited {{entry?.edit_date.toString() | timeAgo}}</h5>
     <br>
     <p *ngIf="entry?.tags?.length > 0">Tags: <span *ngFor="let tag of entry?.tags; let last = last">{{tag}}<ng-container *ngIf="!last"> |
-        </ng-container></span><span *ngIf="entry?.views">, Views: {{entry.views}}</span></p>
+        </ng-container></span><span *ngIf="entry?.views">, {{entry._friendly_views}} views</span></p>
     <br>
 
     <ng-container *ngFor="let section of entry?.sections">
