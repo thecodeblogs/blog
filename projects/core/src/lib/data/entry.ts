@@ -45,7 +45,7 @@ export class Entry extends Base {
             if (this.views < 10) {
                 this._friendly_views = 'Less than ten';
             }
-            if (10 < this.views && this.views < 100) {
+            else if (10 < this.views && this.views < 100) {
                 this._friendly_views = 'Around one hundred';
             }
             else {
