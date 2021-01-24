@@ -27,6 +27,9 @@ export class VisitorProfileService extends DjangoRestFrameworkEndpointService<Vi
         vp.name = deviceInfo.os;
         vp.family = deviceInfo.browser;
         vp.version = deviceInfo.browser_version;
+        vp.device = deviceInfo.device;
+        vp.os_version = deviceInfo.os_version;
+        vp.language = navigator.language;
 
         return vp;
     }
