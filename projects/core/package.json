@@ -1,6 +1,6 @@
 {
   "name": "@thecodeblogs/blog",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "dependencies": {
     "tslib": "^2.0.0"
   },
@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "autolinker": "^3.12.0",
     "ng2-file-upload": "^1.4.0",
+    "ngx-device-detector": "^2.0.5",
     "prismjs": "^1.19.0",
     "slugify": "^1.4.0",
     "@types/node": "^13.7.0"
