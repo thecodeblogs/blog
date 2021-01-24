@@ -12,6 +12,7 @@ export * from './lib/data/list-response';
 export * from './lib/data/section';
 export * from './lib/data/core-event';
 export * from './lib/data/core-event-type.enum';
+export * from './lib/data/visitor-profile';
 
 export * from './lib/services/comment.service';
 export * from './lib/services/django-rest-framework-endpoint.service';
@@ -23,6 +24,7 @@ export * from './lib/services/upload';
 export * from './lib/services/analytics/view.service';
 export * from './lib/services/view';
 export * from './lib/services/interaction';
+export * from './lib/services/visitor-profile.service';
 
 export * from './lib/components/entry-creator/entry-creator.component';
 export * from './lib/components/entry-renderer/entry-renderer.component';
