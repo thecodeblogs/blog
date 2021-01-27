@@ -22,6 +22,7 @@ export * from './lib/services/prism.service';
 export * from './lib/services/upload.service';
 export * from './lib/services/upload';
 export * from './lib/services/analytics/view.service';
+export * from './lib/services/analytics/interaction.service';
 export * from './lib/services/view';
 export * from './lib/services/interaction';
 export * from './lib/services/visitor-profile.service';
