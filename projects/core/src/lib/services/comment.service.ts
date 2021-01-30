@@ -9,7 +9,7 @@ export class CommentService {
     endpoint = '/blog_api/comments/';
 
     constructor(
-        private http: HttpClient,
+        protected http: HttpClient,
     ) {
     }
 
