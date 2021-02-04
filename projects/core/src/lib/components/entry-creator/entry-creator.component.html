@@ -90,6 +90,19 @@
                                           ></textarea>
                             </mat-form-field>
                         </ng-container>
+                        <ng-container *ngSwitchCase="ContentType.HTML">
+                            <mat-form-field class="full-width">
+                                <mat-label>Value</mat-label>
+                                <textarea matInput
+                                          cdkTextareaAutosize
+                                          #autosize="cdkTextareaAutosize"
+                                          cdkAutosizeMinRows="3"
+                                          cdkAutosizeMaxRows="20"
+                                          name="{{content.id}}-content-value"
+                                          [(ngModel)]="content.value"
+                                          ></textarea>
+                            </mat-form-field>
+                        </ng-container>
                         <ng-container *ngSwitchCase="ContentType.CODE">
                             <mat-form-field class="full-width">
                                 <mat-label>Value</mat-label>

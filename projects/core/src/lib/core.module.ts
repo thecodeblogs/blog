@@ -37,6 +37,7 @@ import { MediaUploadModalComponent } from './components/media-upload-modal/media
 import { EntrySelectorDialogComponent } from './components/entry-selector-dialog/entry-selector-dialog.component';
 import {TimeAgoPipe} from './pipes/TimeAgoPipe';
 import {LinkyPipe} from './pipes/LinkyPipe';
+import { StaticHtmlComponent } from './components/static-html/static-html.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import {LinkyPipe} from './pipes/LinkyPipe';
         MediaUploadModalComponent,
         TimeAgoPipe,
         LinkyPipe,
+        StaticHtmlComponent,
     ],
     imports: [
         CommonModule,

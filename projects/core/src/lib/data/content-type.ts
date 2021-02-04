@@ -4,5 +4,6 @@ export enum ContentType {
     CODE = 'code',
     IMAGE = 'image',
     MEDIA = 'media',
+    HTML = 'html',
 }
 
