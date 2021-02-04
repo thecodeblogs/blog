@@ -96,6 +96,7 @@ import { StaticHtmlComponent } from './components/static-html/static-html.compon
         MediaUploadModalComponent,
         TimeAgoPipe,
         LinkyPipe,
+        StaticHtmlComponent,
     ]
 })
 export class CoreModule {
