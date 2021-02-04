@@ -38,6 +38,12 @@
                         </div>
                     </div>
                 </ng-container>
+                <ng-container *ngSwitchCase="ContentType.HTML">
+                    <app-static-html
+                        [value]="content?.value"
+                        >
+                    </app-static-html>
+                </ng-container>
                 <ng-container *ngSwitchDefault>
                     <p>{{content?.value}}</p>
                 </ng-container>
