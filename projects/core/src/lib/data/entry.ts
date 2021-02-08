@@ -52,6 +52,9 @@ export class Entry extends Base {
                 this._friendly_views = this.views.toString();
             }
         }
+        if (!this.sections) {
+            this.sections = [];
+        }
     }
 
 
