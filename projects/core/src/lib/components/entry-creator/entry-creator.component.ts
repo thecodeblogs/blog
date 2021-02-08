@@ -31,6 +31,7 @@ const slugify = require('slugify');
 export class EntryCreatorComponent implements OnInit {
 
     static CURRENT_ENTRY = 'current_entry';
+    static DEFAULT_NEW_ENTRY_TITLE = 'A New Entry';
 
     ContentType = ContentType;
     Object = Object;
@@ -162,11 +163,21 @@ export class EntryCreatorComponent implements OnInit {
 
         if (savedEntry) {
             this.entry = new Entry(JSON.parse(savedEntry));
+            this.entry.sort();
+            setTimeout(() => {
+                this.entryService.currentlyEditedEntry.next(this.entry);
+            }, 10);
+        } else {
+            this.entry = new Entry();
+            this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+            this.entryService.create(this.entry).subscribe((response) => {
+                this.entry = response;
+                this.entry.sort();
+                setTimeout(() => {
+                    this.entryService.currentlyEditedEntry.next(this.entry);
+                }, 10);
+            });
         }
-        this.entry.sort();
-        setTimeout(() => {
-            this.entryService.currentlyEditedEntry.next(this.entry);
-        }, 10);
 
         this.uploader.onCompleteItem = (item, response) => {
             // const responseObj = JSON.parse(response)
@@ -251,6 +262,7 @@ export class EntryCreatorComponent implements OnInit {
         const finish = confirm('Are you sure your finished? The JSON and entry displayed will be removed. Make sure you have already copied it.');
         if (finish) {
             this.entry = new Entry();
+            this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
             this.entryService.currentlyEditedEntry.next(this.entry);
             localStorage.setItem(
                 EntryCreatorComponent.CURRENT_ENTRY,
@@ -292,6 +304,7 @@ export class EntryCreatorComponent implements OnInit {
             this.entry.edit_date = new Date();
             this.entryService.updateUnpublishedEntry(this.entry).subscribe(() => {
                 this.entry = new Entry();
+                this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
                 this.entry.published = false;
                 this.entry.version = 1;
                 this.entryService.currentlyEditedEntry.next(this.entry);
@@ -303,6 +316,14 @@ export class EntryCreatorComponent implements OnInit {
                     this.tags = [];
                     this.refreshTags();
                 });
+            });
+        }
+    }
+    delete() {
+        const confirmDelete = confirm('Are you sure you want to delete this draft? Once it is deleted it cannot be recovered.');
+        if (confirmDelete) {
+            this.entryService.delete(this.entry).subscribe(() => {
+                this.entry = null;
             });
         }
     }
