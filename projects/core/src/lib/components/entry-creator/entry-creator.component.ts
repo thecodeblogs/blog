@@ -170,6 +170,9 @@ export class EntryCreatorComponent implements OnInit {
         } else {
             this.entry = new Entry();
             this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+            this.entry.published = false;
+            this.entry.version = 1;
+
             this.entryService.create(this.entry).subscribe((response) => {
                 this.entry = response;
                 this.entry.sort();
@@ -261,15 +264,17 @@ export class EntryCreatorComponent implements OnInit {
     startNew() {
         const finish = confirm('Are you sure your finished? The JSON and entry displayed will be removed. Make sure you have already copied it.');
         if (finish) {
+
             this.entry = new Entry();
             this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+            this.entry.published = false;
+            this.entry.version = 1;
+
             this.entryService.currentlyEditedEntry.next(this.entry);
             localStorage.setItem(
                 EntryCreatorComponent.CURRENT_ENTRY,
                 JSON.stringify(this.entry)
             );
-            this.entry.published = false;
-            this.entry.version = 1;
             this.entryService.create(this.entry).subscribe((next) => {
             });
         }
