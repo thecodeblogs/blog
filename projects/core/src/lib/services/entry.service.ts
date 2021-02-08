@@ -47,7 +47,15 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
                 this.triggerCoreEvent((response as Entry), CoreEventType.UPDATE);
                 console.log('Synced ' + e.id + '...');
             }, (err) => {
-                console.log('Error encountered syncing ' + e.id);
+                console.log('Error encountered syncing ' + e.id + ', trying to create...');
+                this.http.post(this.endpoint, e).pipe(
+                    map(this.handleResponse)
+                ).subscribe((response) => {
+                    this.triggerCoreEvent((response as Entry), CoreEventType.CREATE);
+                    console.log('Created ' + e.id + '...');
+                }, (createErr) => {
+                    console.log('Error creating ' + e.id);
+                });
             });
         });
     }

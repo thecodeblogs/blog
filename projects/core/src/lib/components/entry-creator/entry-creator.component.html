@@ -1,5 +1,5 @@
 <div class="section creator fields">
-    <form #createForm="ngForm" (change)="onChange()">
+    <form #createForm="ngForm" (change)="onChange()" *ngIf="this.entry">
         <div class="form-group">
             <mat-form-field class="full-width">
                 <mat-label>Title</mat-label>
@@ -189,13 +189,15 @@
         </mat-card>
         <button mat-raised-button (click)="addSection()" *ngIf="entry.sections?.length === 0">+ Add Section</button>
         <button mat-raised-button (click)="addSection()" *ngIf="!entry.sections">+ Add Section</button>
+        <div class="controls">
+            <button mat-raised-button (click)="resetDate()">Reset the Date</button>
+            <button mat-raised-button (click)="delete()">Delete</button>
+            <button mat-raised-button (click)="publish()">Publish</button>
+            <button mat-raised-button (click)="startNew()">New</button>
+        </div>
     </form>
     <div class="controls">
-        <button mat-raised-button (click)="resetDate()">Reset the Date</button>
-        <button mat-raised-button (click)="publish()">Publish</button>
-        <button mat-raised-button (click)="startNew()">New</button>
-    </div>
-    <div class="controls">
         <button mat-raised-button (click)="seeEntries()">See Entries</button>
+        <button *ngIf="!this.entry" mat-raised-button (click)="startNew()">New</button>
     </div>
 </div>
