@@ -27,6 +27,7 @@ export * from './lib/services/view';
 export * from './lib/services/interaction';
 export * from './lib/services/visitor-profile.service';
 export * from './lib/services/static-html.service';
+export * from './lib/services/tag.service';
 
 export * from './lib/components/entry-creator/entry-creator.component';
 export * from './lib/components/entry-renderer/entry-renderer.component';

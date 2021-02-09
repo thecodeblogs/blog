@@ -38,6 +38,7 @@ import { EntrySelectorDialogComponent } from './components/entry-selector-dialog
 import {TimeAgoPipe} from './pipes/TimeAgoPipe';
 import {LinkyPipe} from './pipes/LinkyPipe';
 import { StaticHtmlComponent } from './components/static-html/static-html.component';
+import {TagService} from './services/tag.service';
 
 
 @NgModule({
@@ -83,6 +84,7 @@ import { StaticHtmlComponent } from './components/static-html/static-html.compon
         PrismService,
         IdentityService,
         DjangoRestFrameworkEndpointService,
+        TagService,
     ],
     exports: [
         EntryRendererComponent,
