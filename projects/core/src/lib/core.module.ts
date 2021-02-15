@@ -58,7 +58,6 @@ import {TagService} from './services/tag.service';
     ],
     imports: [
         CommonModule,
-        BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         DragDropModule,
