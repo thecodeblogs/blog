@@ -16,7 +16,7 @@
                     <pre><code class="language-ts">{{content?.value}}</code></pre>
                 </ng-container>
                 <ng-container *ngSwitchCase="ContentType.URL">
-                    <a [href]="content?.value" target="_blank">{{content.title}}</a>
+                    <a [href]="content?.value" target="_blank">{{content.title}}</a><br>
                 </ng-container>
                 <ng-container *ngSwitchCase="ContentType.IMAGE">
                     <div class="restrict">
