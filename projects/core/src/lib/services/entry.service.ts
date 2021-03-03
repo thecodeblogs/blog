@@ -5,7 +5,7 @@ import {Entry} from '../data/entry';
 import {Observable, Subject} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
 import {loMap} from 'lodash';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {CoreEvent} from '../data/core-event';
 import {CoreEventType} from '../data/core-event-type.enum';
 
@@ -15,6 +15,7 @@ import {CoreEventType} from '../data/core-event-type.enum';
 export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
 
     endpoint = '/blog_api/entries/';
+    adminEndpoint = '/blog_api/admin/entries/';
 
     _currentlyEditedEntry: Entry;
     currentlyEditedEntry: Subject<Entry> = new Subject<Entry>();
@@ -27,8 +28,8 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
     handleListResponse(obj: ListResponse<Entry>): ListResponse<Entry> {
         const response = obj;
         const results = [];
-        for (let i = 0; i < response.results.length; i++) {
-            results.push(new Entry(response.results[i]));
+        for (const result of response.results) {
+            results.push(new Entry(result));
         }
         response.results = results;
         return response;
@@ -41,14 +42,16 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
         super(http);
         this.sub = this.currentlyEditedEntry.pipe(debounceTime(3000)).subscribe((e) => {
             e.edit_date = new Date();
-            this.http.patch(this.endpoint + e.id + '/?published=false', e).pipe(
+            const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
+
+            this.http.patch(this.adminEndpoint + e.id, e, {params}).pipe(
                 map(this.handleResponse.bind(this))
             ).subscribe((response) => {
                 this.triggerCoreEvent((response as Entry), CoreEventType.UPDATE);
                 console.log('Synced ' + e.id + '...');
             }, (err) => {
                 console.log('Error encountered syncing ' + e.id + ', trying to create...');
-                this.http.post(this.endpoint, e).pipe(
+                this.http.post(this.adminEndpoint, e).pipe(
                     map(this.handleResponse)
                 ).subscribe((response) => {
                     this.triggerCoreEvent((response as Entry), CoreEventType.CREATE);
@@ -61,13 +64,14 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
     }
 
     get(): Observable<ListResponse<Entry>> {
-        return this.http.get(this.endpoint + '?published=true').pipe(
+        return this.http.get(this.endpoint).pipe(
             map(this.handleListResponse.bind(this))
         );
     }
 
     getUnpublishedEntries() {
-        return this.http.get(this.endpoint + '?published=false');
+        const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
+        return this.http.get(this.adminEndpoint, {params});
     }
 
     getBySlug(slug: string) {
@@ -76,12 +80,14 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
         );
     }
     getUnpublishedById(id: string): Observable<Entry> {
-        return this.http.get<Entry>(this.endpoint + id + '?published=false').pipe(
+        const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
+        return this.http.get<Entry>(this.adminEndpoint + id, {params}).pipe(
             map(this.handleResponse.bind(this))
         );
     }
     updateUnpublishedEntry(entry: Entry): Observable<Entry> {
-        return this.http.patch<Entry>(this.endpoint + entry.id + '/?published=false', entry).pipe(
+        const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
+        return this.http.patch<Entry>(this.adminEndpoint + entry.id, entry, {params}).pipe(
             map((val) => this.triggerCoreEvent(val, CoreEventType.UPDATE)),
             map(this.handleResponse.bind(this))
         );
