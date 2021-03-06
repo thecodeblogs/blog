@@ -101,4 +101,16 @@ export class EntryRendererComponent implements OnInit, AfterViewChecked {
         }
         return mediaIsZip;
     }
+    approve(comment: any) {
+        comment.approved = !comment.approved;
+        this.commentService.patchComment(Object.assign({}, {approved: true}, comment)).subscribe((rComment) => {
+
+        });
+    }
+    unapprove(comment: any) {
+        comment.approved = !comment.approved;
+        this.commentService.patchComment(Object.assign({}, {approved: false}, comment)).subscribe((rComment) => {
+
+        });
+    }
 }
