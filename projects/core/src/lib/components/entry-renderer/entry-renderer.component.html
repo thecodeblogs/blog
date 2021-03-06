@@ -70,6 +70,10 @@
                     <mat-card-subtitle>{{comment.date_obj | timeAgo}}</mat-card-subtitle>
                     <mat-card-content>
                         <p>{{comment.content}}</p>
+                        <ng-container *ngIf="me?.id === entry?.__server_generated_properties?.author_id">
+                            <a href="javascript:void(0);" *ngIf="!comment?.approved" (click)="approve(comment)">Approve</a>
+                            <a href="javascript:void(0);" *ngIf="comment?.approved" (click)="unapprove(comment)">Unapprove</a>
+                        </ng-container>
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -77,6 +81,9 @@
     </ng-container>
     <ng-container *ngIf="!me">
         <a href="/signup">Signup</a> or <a href="/login">login</a> to join the conversation!
+    </ng-container>
+    <ng-container *ngIf="me && !me?.comments_public">
+        <p>Note, your comments will not be public be default. It is possible I will make your comments public, but for now comments are just between you and me.</p>
     </ng-container>
     <ng-container *ngIf="me">
         <h2 style="width: 100%;">Leave a Comment</h2>
@@ -87,9 +94,6 @@
         </mat-form-field>
         <br>
         <button (click)="postComment($event)" style="text-align: right;" mat-button>Submit</button>
-    </ng-container>
-    <ng-container *ngIf="me && !me?.comments_public">
-        <p>Note, your comments will not be public be default. It is possible I will make your comments public, but for now comments are just between you and me.</p>
     </ng-container>
     <div style="margin-bottom: 30px;"></div>
 </div>
