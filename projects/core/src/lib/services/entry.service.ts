@@ -44,7 +44,7 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
             e.edit_date = new Date();
             const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
 
-            this.http.patch(this.adminEndpoint + e.id, e, {params}).pipe(
+            this.http.patch(this.adminEndpoint + e.id + '/', e, {params}).pipe(
                 map(this.handleResponse.bind(this))
             ).subscribe((response) => {
                 this.triggerCoreEvent((response as Entry), CoreEventType.UPDATE);
@@ -87,7 +87,7 @@ export class EntryService extends DjangoRestFrameworkEndpointService<Entry> {
     }
     updateUnpublishedEntry(entry: Entry): Observable<Entry> {
         const params = new HttpParams().set('published', JSON.stringify(false)).set('defunct', JSON.stringify(false));
-        return this.http.patch<Entry>(this.adminEndpoint + entry.id, entry, {params}).pipe(
+        return this.http.patch<Entry>(this.adminEndpoint + entry.id + '/', entry, {params}).pipe(
             map((val) => this.triggerCoreEvent(val, CoreEventType.UPDATE)),
             map(this.handleResponse.bind(this))
         );

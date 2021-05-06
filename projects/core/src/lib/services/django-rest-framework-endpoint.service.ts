@@ -41,7 +41,7 @@ export class DjangoRestFrameworkEndpointService<T> {
         );
     }
     create(entity: T): Observable<T> {
-        return this.http.post<T>(this.endpoint, entity).pipe(
+        return this.http.post<T>(this.endpoint, entity + '/').pipe(
             map((val) => this.triggerCoreEvent(val, CoreEventType.CREATE)),
             map(this.handleResponse.bind(this))
         );
