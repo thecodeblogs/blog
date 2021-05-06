@@ -41,6 +41,7 @@ import { StaticHtmlComponent } from './components/static-html/static-html.compon
 import {TagService} from './services/tag.service';
 import { MainComponent } from './components/main/main.component';
 import { EntryRendererWrapperComponent } from './components/entry-renderer-wrapper/entry-renderer-wrapper.component';
+import {RouterModule} from '@angular/router';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { EntryRendererWrapperComponent } from './components/entry-renderer-wrapp
     ],
     imports: [
         CommonModule,
+        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         DragDropModule,

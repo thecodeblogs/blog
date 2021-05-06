@@ -9,6 +9,7 @@
     "@angular/core": "^10.1.5",
     "@angular/cdk": "^10.2.4",
     "@angular/material": "^10.2.4",
+    "@angular/router": "^10.1.5",
     "@fortawesome/angular-fontawesome": "^0.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
