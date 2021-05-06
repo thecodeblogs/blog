@@ -1,0 +1,47 @@
+a {
+  text-decoration: none;
+}
+
+.body {
+  flex-grow: 1;
+  max-height: calc(100vh - 100px);
+  overflow: scroll;
+}
+
+@media screen and (max-height: 560px) {
+  .body{
+    max-height: calc(100vh);
+  }
+}
+
+.left {
+  min-width: 400px;
+  max-width: 33vw;
+}
+.right {
+  min-width: 400px;
+  max-width: 33vw;
+}
+
+.left-toggle {
+  position: fixed;
+  top: 50%;
+  left: 5px;
+  z-index: 100;
+}
+
+.right-toggle {
+  position: fixed;
+  top: 50%;
+  right: 5px;
+  z-index: 100;
+}
+
+a {
+  margin-right: 10px;
+  &:not(:last-child):after {
+    margin-left: 10px;
+    content: '|'
+  }
+}
+
