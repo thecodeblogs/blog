@@ -104,6 +104,8 @@ import {RouterModule} from '@angular/router';
         TimeAgoPipe,
         LinkyPipe,
         StaticHtmlComponent,
+        MainComponent,
+        EntryRendererWrapperComponent,
     ]
 })
 export class CoreModule {
