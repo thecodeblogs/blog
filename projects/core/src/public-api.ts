@@ -39,8 +39,14 @@ export * from './lib/components/media-upload-modal/media-upload-modal.component'
 export * from './lib/components/outline-view/outline-view.component';
 export * from './lib/components/side-navigation/side-navigation.component';
 export * from './lib/components/static-html/static-html.component';
+export * from './lib/components/main/main.component';
+export * from './lib/components/entry-renderer-wrapper/entry-renderer-wrapper.component';
 
 export * from './lib/pipes/LinkyPipe';
 export * from './lib/pipes/TimeAgoPipe';
 
+export * from './lib/routing/routes';
+
 export * from './lib/core.module';
+
+
