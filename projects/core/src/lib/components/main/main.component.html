@@ -1,0 +1,23 @@
+<ng-container *ngIf="loaded">
+    <div class="container">
+        <div class="body">
+            <div class="container-row">
+                <mat-sidenav-container [autosize]="true">
+                    <mat-sidenav [(opened)]="showLeftCol" #leftcol opened mode="side" class="left no-scrollbar">
+                        <router-outlet name="left-col"></router-outlet>
+                        <button mat-mini-fab color="primary" class="fade left-toggle" *ngIf="showLeftCol" (click)="leftcol.toggle()"> << </button>
+                    </mat-sidenav>
+                    <mat-sidenav [(opened)]="showRightCol" #rightcol mode="side" position="end" class="right">
+                        <button mat-mini-fab color="primary" class="fade right-toggle" *ngIf="showRightCol" (click)="rightcol.toggle()"> >> </button>
+                        <router-outlet name="right-col"></router-outlet>
+                    </mat-sidenav>
+                    <div class="middle">
+                        <button mat-mini-fab color="primary" class="fade left-toggle" *ngIf="!showLeftCol" (click)="leftcol.toggle()"> >> </button>
+                        <button  mat-mini-fab color="primary" class="fade right-toggle" *ngIf="!showRightCol" (click)="rightcol.toggle()"> << </button>
+                        <router-outlet></router-outlet>
+                    </div>
+                </mat-sidenav-container>
+            </div>
+        </div>
+    </div>
+</ng-container>

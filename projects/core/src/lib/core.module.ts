@@ -39,6 +39,8 @@ import {TimeAgoPipe} from './pipes/TimeAgoPipe';
 import {LinkyPipe} from './pipes/LinkyPipe';
 import { StaticHtmlComponent } from './components/static-html/static-html.component';
 import {TagService} from './services/tag.service';
+import { MainComponent } from './components/main/main.component';
+import { EntryRendererWrapperComponent } from './components/entry-renderer-wrapper/entry-renderer-wrapper.component';
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import {TagService} from './services/tag.service';
         TimeAgoPipe,
         LinkyPipe,
         StaticHtmlComponent,
+        MainComponent,
+        EntryRendererWrapperComponent,
     ],
     imports: [
         CommonModule,
