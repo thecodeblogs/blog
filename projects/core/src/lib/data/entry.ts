@@ -17,6 +17,9 @@ export class Entry extends Base {
     tags: string[];
     views: number;
 
+    should_publish_in_future = false;
+    future_publish_date: Date;
+
     _friendly_views: string;
 
     constructor(init?: Partial<Entry>) {

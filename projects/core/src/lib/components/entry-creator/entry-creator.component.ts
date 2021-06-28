@@ -21,6 +21,7 @@ import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {TagService} from '../../services/tag.service';
+import {SchedulePublishDialogComponent} from '../schedule-publish-dialog/schedule-publish-dialog.component';
 const slugify = require('slugify');
 
 @Component({
@@ -301,27 +302,51 @@ export class EntryCreatorComponent implements OnInit {
         });
     }
 
+    postPublishCallback() {
+        this.entry = new Entry();
+        this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+        this.entry.published = false;
+        this.entry.version = 1;
+        this.entryService.currentlyEditedEntry.next(this.entry);
+        localStorage.setItem(
+            EntryCreatorComponent.CURRENT_ENTRY,
+            JSON.stringify(this.entry)
+        );
+        this.entryService.create(this.entry).subscribe((next) => {
+            this.tags = [];
+            this.refreshTags();
+        });
+    }
+
+    openSchedulePublishDialog() {
+        const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
+        if (publish) {
+            const dialogRef = this.dialog.open(SchedulePublishDialogComponent, {
+                width: '500px',
+                data: {name: 'test', animal: 'test'}
+            });
+
+            dialogRef.afterClosed().subscribe((test) => {
+                debugger;
+            }, (error) => {
+                debugger;
+            });
+        }
+    }
+
+    schedulePublish() {
+        this.entry.edit_date = new Date();
+        this.entry.should_publish_in_future = true;
+        this.entry.future_publish_date = new Date();
+        this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback);
+    }
     publish() {
         const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
         if (publish) {
             this.entry.published = true;
             this.entry.publish_date = new Date();
             this.entry.edit_date = new Date();
-            this.entryService.updateUnpublishedEntry(this.entry).subscribe(() => {
-                this.entry = new Entry();
-                this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
-                this.entry.published = false;
-                this.entry.version = 1;
-                this.entryService.currentlyEditedEntry.next(this.entry);
-                localStorage.setItem(
-                    EntryCreatorComponent.CURRENT_ENTRY,
-                    JSON.stringify(this.entry)
-                );
-                this.entryService.create(this.entry).subscribe((next) => {
-                    this.tags = [];
-                    this.refreshTags();
-                });
-            });
+            this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback);
         }
     }
     delete() {

@@ -1,6 +1,6 @@
 {
     "name": "blog",
-    "version": "0.10.1",
+    "version": "0.11.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -26,6 +26,7 @@
         "autolinker": "^3.12.0",
         "ng2-file-upload": "^1.4.0",
         "ngx-device-detector": "^2.0.5",
+        "ngx-material-timepicker": "^5.5.3",
         "prismjs": "^1.19.0",
         "rxjs": "~6.6.3",
         "slugify": "^1.4.0",
