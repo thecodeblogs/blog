@@ -49,9 +49,14 @@ export class EntryCreatorComponent implements OnInit {
     @ViewChild('tagauto') matAutocomplete: MatAutocomplete;
 
     tagCtrl = new FormControl();
+    publishDateControl = new FormControl();
 
     tag_to_add: string;
     selectable = false;
+
+    scheduling = false;
+    customScheduleTime = '';
+    today = new Date();
 
     @Input() allowedMimeTypes = [
                 'image/jpeg',
@@ -318,27 +323,22 @@ export class EntryCreatorComponent implements OnInit {
         });
     }
 
-    openSchedulePublishDialog() {
-        const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
-        if (publish) {
-            const dialogRef = this.dialog.open(SchedulePublishDialogComponent, {
-                width: '500px',
-                data: {name: 'test', animal: 'test'}
-            });
-
-            dialogRef.afterClosed().subscribe((test) => {
-                debugger;
-            }, (error) => {
-                debugger;
-            });
-        }
+    cancelScheduling() {
+        this.entry.future_publish_date = null;
+        this.entry.should_publish_in_future = false;
+        this.scheduling = false;
     }
 
-    schedulePublish() {
-        this.entry.edit_date = new Date();
+
+    exposeScheduling() {
+        const scheduledDate = new Date();
+        scheduledDate.setDate(scheduledDate.getDate() + 1);
+
+        this.customScheduleTime = scheduledDate.getHours() + ':' + scheduledDate.getMinutes() + ' AM';
+
+        this.entry.future_publish_date = scheduledDate;
         this.entry.should_publish_in_future = true;
-        this.entry.future_publish_date = new Date();
-        this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback);
+        this.scheduling =  true;
     }
     publish() {
         const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
@@ -356,5 +356,8 @@ export class EntryCreatorComponent implements OnInit {
                 this.entry = null;
             });
         }
+    }
+    setTime(e) {
+        console.log(JSON.stringify(e));
     }
 }

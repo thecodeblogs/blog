@@ -189,13 +189,52 @@
         </mat-card>
         <button mat-raised-button (click)="addSection()" *ngIf="entry.sections?.length === 0">+ Add Section</button>
         <button mat-raised-button (click)="addSection()" *ngIf="!entry.sections">+ Add Section</button>
+
         <div class="controls">
             <button mat-raised-button (click)="resetDate()">Reset the Date</button>
             <button mat-raised-button (click)="delete()">Delete</button>
-            <button mat-raised-button (click)="publish()">Publish</button>
-            <button mat-raised-button (click)="openSchedulePublishDialog()">Schedule Publishing</button>
+            <button mat-raised-button [disabled]="scheduling" (click)="publish()">Publish</button>
+            <button mat-raised-button [disabled]="scheduling" (click)="exposeScheduling()">Schedule</button>
             <button mat-raised-button (click)="startNew()">New</button>
         </div>
+        <p *ngIf="scheduling">You must publish from the scheduling options while using scheduling</p>
+
+        <mat-card *ngIf="scheduling">
+            <h4>
+               Scheduling Options
+            </h4>
+
+            <div class="form-group">
+                <mat-form-field class="full-width">
+                    <mat-label>Date</mat-label>
+                    <input
+                        #futurePublishDate
+                        matInput
+                        [matDatepicker]="picker"
+                        [min]="today"
+                        [(ngModel)]="entry.future_publish_date"
+                        name="future-publish-date"
+                    >
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-label>Time</mat-label>
+                <ngx-timepicker-field
+                    [defaultTime]="customScheduleTime"
+                    [format]="12"
+                    [buttonAlign]="'left'"
+                    (timeChanged)="setTime($event)"
+                ></ngx-timepicker-field>
+            </div>
+
+            <div mat-dialog-actions>
+                <div class="controls">
+                    <button mat-raised-button (click)="cancelScheduling()">Cancel Scheduling</button>
+                    <button mat-raised-button (click)="publish()">Publish</button>
+                </div>
+            </div>
+        </mat-card>
     </form>
     <div class="controls">
         <button mat-raised-button (click)="seeEntries()">See Entries</button>
