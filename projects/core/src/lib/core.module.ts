@@ -16,9 +16,12 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {FontAwesomeModule, FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {FileUploadModule} from 'ng2-file-upload';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 import { CommentService } from './services/comment.service';
 import { EntryService } from './services/entry.service';
@@ -42,6 +45,7 @@ import {TagService} from './services/tag.service';
 import { MainComponent } from './components/main/main.component';
 import { EntryRendererWrapperComponent } from './components/entry-renderer-wrapper/entry-renderer-wrapper.component';
 import {RouterModule} from '@angular/router';
+import { SchedulePublishDialogComponent } from './components/schedule-publish-dialog/schedule-publish-dialog.component';
 
 
 @NgModule({
@@ -60,6 +64,7 @@ import {RouterModule} from '@angular/router';
         StaticHtmlComponent,
         MainComponent,
         EntryRendererWrapperComponent,
+        SchedulePublishDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -79,8 +84,11 @@ import {RouterModule} from '@angular/router';
         MatAutocompleteModule,
         MatChipsModule,
         MatIconModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         FontAwesomeModule,
         FileUploadModule,
+        NgxMaterialTimepickerModule,
     ],
     providers: [
         CommentService,

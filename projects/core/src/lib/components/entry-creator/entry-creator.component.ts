@@ -21,6 +21,7 @@ import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {TagService} from '../../services/tag.service';
+import {SchedulePublishDialogComponent} from '../schedule-publish-dialog/schedule-publish-dialog.component';
 const slugify = require('slugify');
 
 @Component({
@@ -48,9 +49,16 @@ export class EntryCreatorComponent implements OnInit {
     @ViewChild('tagauto') matAutocomplete: MatAutocomplete;
 
     tagCtrl = new FormControl();
+    publishDateControl = new FormControl();
 
     tag_to_add: string;
     selectable = false;
+
+    scheduling = false;
+    customScheduleTime = '';
+    today = new Date();
+    hours: number;
+    minutes: number;
 
     @Input() allowedMimeTypes = [
                 'image/jpeg',
@@ -105,6 +113,8 @@ export class EntryCreatorComponent implements OnInit {
         private cdr: ChangeDetectorRef,
         private dialog: MatDialog,
     ) {
+        const scheduledDate = new Date();
+        this.customScheduleTime = scheduledDate.getHours() + ':' + scheduledDate.getMinutes() + ' AM';
     }
 
     private _filter(value: string): string[] {
@@ -127,6 +137,7 @@ export class EntryCreatorComponent implements OnInit {
         }
 
         this.tagCtrl.setValue(null);
+        this.onChange();
     }
 
     remove(fruit: string): void {
@@ -135,12 +146,14 @@ export class EntryCreatorComponent implements OnInit {
         if (index >= 0) {
             this.tags.splice(index, 1);
         }
+        this.onChange();
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
         this.tags.push(event.option.viewValue);
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
+        this.onChange();
     }
 
     refreshTags() {
@@ -149,6 +162,21 @@ export class EntryCreatorComponent implements OnInit {
             this.filtered_tags = this.tagCtrl.valueChanges.pipe(
                 startWith(null),
                 map((tag: string | null) => tag ? this._filter(tag) : this.all_tags.slice()));
+        });
+    }
+
+    createNewEntry() {
+        this.entry = new Entry();
+        this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+        this.entry.published = false;
+        this.entry.version = 1;
+
+        this.entryService.create(this.entry).subscribe((response) => {
+            this.entry = response;
+            this.entry.sort();
+            setTimeout(() => {
+                this.entryService.currentlyEditedEntry.next(this.entry);
+            }, 10);
         });
     }
 
@@ -163,23 +191,30 @@ export class EntryCreatorComponent implements OnInit {
 
         if (savedEntry) {
             this.entry = new Entry(JSON.parse(savedEntry));
+
+            if (this.entry.should_publish_in_future && this.entry.future_publish_date < new Date()) {
+                this.createNewEntry();
+            }
+
             this.entry.sort();
+            if (this.entry.should_publish_in_future) {
+                // Restore scheduling settings
+                this.scheduling = true;
+                let hours = this.entry.future_publish_date.getHours();
+                let minutes: string | number = this.entry.future_publish_date.getMinutes();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                if (hours >= 12) {
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                }
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                this.customScheduleTime = hours + ':' + minutes + ' ' + ampm;
+            }
             setTimeout(() => {
                 this.entryService.currentlyEditedEntry.next(this.entry);
             }, 10);
         } else {
-            this.entry = new Entry();
-            this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
-            this.entry.published = false;
-            this.entry.version = 1;
-
-            this.entryService.create(this.entry).subscribe((response) => {
-                this.entry = response;
-                this.entry.sort();
-                setTimeout(() => {
-                    this.entryService.currentlyEditedEntry.next(this.entry);
-                }, 10);
-            });
+            this.createNewEntry();
         }
 
         this.uploader.onCompleteItem = (item, response) => {
@@ -208,6 +243,7 @@ export class EntryCreatorComponent implements OnInit {
             content.value = dialogRef.componentInstance.imgLink;
             content.additional = [];
             content.additional.push({key: Content.KEY_MIMETYPE, value: dialogRef.componentInstance.mimeType});
+            this.onChange();
         });
     }
 
@@ -259,6 +295,8 @@ export class EntryCreatorComponent implements OnInit {
     resetDate() {
         this.entry.create_date = new Date();
         this.entry.edit_date = new Date();
+
+        this.onChange();
     }
 
     startNew() {
@@ -301,27 +339,47 @@ export class EntryCreatorComponent implements OnInit {
         });
     }
 
+    postPublishCallback() {
+        this.entry = new Entry();
+        this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+        this.entry.published = false;
+        this.entry.version = 1;
+        this.entryService.currentlyEditedEntry.next(this.entry);
+        localStorage.setItem(
+            EntryCreatorComponent.CURRENT_ENTRY,
+            JSON.stringify(this.entry)
+        );
+        this.entryService.create(this.entry).subscribe((next) => {
+            this.tags = [];
+            this.refreshTags();
+        });
+    }
+
+    cancelScheduling() {
+        this.entry.future_publish_date = null;
+        this.entry.should_publish_in_future = false;
+        this.scheduling = false;
+        this.onChange();
+    }
+
+    exposeScheduling() {
+        const scheduledDate = new Date();
+        scheduledDate.setDate(scheduledDate.getDate() + 1);
+
+        this.entry.future_publish_date = scheduledDate;
+        this.setTime(this.customScheduleTime);
+
+        this.entry.should_publish_in_future = true;
+        this.scheduling =  true;
+        this.onChange();
+    }
     publish() {
         const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
         if (publish) {
             this.entry.published = true;
             this.entry.publish_date = new Date();
             this.entry.edit_date = new Date();
-            this.entryService.updateUnpublishedEntry(this.entry).subscribe(() => {
-                this.entry = new Entry();
-                this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
-                this.entry.published = false;
-                this.entry.version = 1;
-                this.entryService.currentlyEditedEntry.next(this.entry);
-                localStorage.setItem(
-                    EntryCreatorComponent.CURRENT_ENTRY,
-                    JSON.stringify(this.entry)
-                );
-                this.entryService.create(this.entry).subscribe((next) => {
-                    this.tags = [];
-                    this.refreshTags();
-                });
-            });
+            this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback);
         }
     }
     delete() {
@@ -331,5 +389,27 @@ export class EntryCreatorComponent implements OnInit {
                 this.entry = null;
             });
         }
+    }
+    onDateChange() {
+        this.entry.future_publish_date.setHours(this.hours);
+        this.entry.future_publish_date.setMinutes(this.minutes);
+        this.onChange();
+    }
+
+
+    setTime(e) {
+        const firstTimeSplit = e.split(' ');
+        const secondTimeSplit = firstTimeSplit[0].split(':');
+        this.hours = Number(secondTimeSplit[0]);
+        this.minutes = Number(secondTimeSplit[1]);
+
+        if (firstTimeSplit[1] === 'PM') {
+            this.hours = Number(this.hours) + 12;
+        }
+
+        this.entry.future_publish_date.setHours(this.hours);
+        this.entry.future_publish_date.setMinutes(this.minutes);
+
+        this.onChange();
     }
 }
