@@ -38,6 +38,9 @@ export class Entry extends Base {
         if (this.publish_date) {
             this.publish_date = new Date(this.publish_date);
         }
+        if (this.future_publish_date) {
+            this.future_publish_date = new Date(this.future_publish_date);
+        }
         if (!this.version) {
             this.version = 1;
         }

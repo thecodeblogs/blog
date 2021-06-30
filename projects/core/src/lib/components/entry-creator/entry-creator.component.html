@@ -197,9 +197,9 @@
             <button mat-raised-button [disabled]="scheduling" (click)="exposeScheduling()">Schedule</button>
             <button mat-raised-button (click)="startNew()">New</button>
         </div>
-        <p *ngIf="scheduling">You must publish from the scheduling options while using scheduling</p>
+        <p *ngIf="scheduling">Publishing is disabled while scheduling is being used.</p>
 
-        <mat-card *ngIf="scheduling">
+        <mat-card [hidden]="!scheduling">
             <h4>
                Scheduling Options
             </h4>
@@ -212,11 +212,14 @@
                         matInput
                         [matDatepicker]="picker"
                         [min]="today"
+                        (dateInput)="onDateChange()"
+                        (dateChange)="onDateChange()"
                         [(ngModel)]="entry.future_publish_date"
                         name="future-publish-date"
                     >
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-datepicker
+                        #picker></mat-datepicker>
                 </mat-form-field>
 
                 <mat-label>Time</mat-label>
@@ -226,14 +229,16 @@
                     [buttonAlign]="'left'"
                     (timeChanged)="setTime($event)"
                 ></ngx-timepicker-field>
+                <p>Times are represented in your local time zone</p>
             </div>
 
             <div mat-dialog-actions>
                 <div class="controls">
                     <button mat-raised-button (click)="cancelScheduling()">Cancel Scheduling</button>
-                    <button mat-raised-button (click)="publish()">Publish</button>
                 </div>
             </div>
+            <p>This post will be published as soon as its scheduled date and time arrive. No further action is needed by you. If you do not
+            want to use scheduling, you can cancel scheduling and manually publish.</p>
         </mat-card>
     </form>
     <div class="controls">

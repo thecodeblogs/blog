@@ -57,6 +57,8 @@ export class EntryCreatorComponent implements OnInit {
     scheduling = false;
     customScheduleTime = '';
     today = new Date();
+    hours: number;
+    minutes: number;
 
     @Input() allowedMimeTypes = [
                 'image/jpeg',
@@ -111,6 +113,8 @@ export class EntryCreatorComponent implements OnInit {
         private cdr: ChangeDetectorRef,
         private dialog: MatDialog,
     ) {
+        const scheduledDate = new Date();
+        this.customScheduleTime = scheduledDate.getHours() + ':' + scheduledDate.getMinutes() + ' AM';
     }
 
     private _filter(value: string): string[] {
@@ -133,6 +137,7 @@ export class EntryCreatorComponent implements OnInit {
         }
 
         this.tagCtrl.setValue(null);
+        this.onChange();
     }
 
     remove(fruit: string): void {
@@ -141,12 +146,14 @@ export class EntryCreatorComponent implements OnInit {
         if (index >= 0) {
             this.tags.splice(index, 1);
         }
+        this.onChange();
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
         this.tags.push(event.option.viewValue);
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
+        this.onChange();
     }
 
     refreshTags() {
@@ -170,6 +177,19 @@ export class EntryCreatorComponent implements OnInit {
         if (savedEntry) {
             this.entry = new Entry(JSON.parse(savedEntry));
             this.entry.sort();
+            if (this.entry.should_publish_in_future) {
+                // Restore scheduling settings
+                this.scheduling = true;
+                let hours = this.entry.future_publish_date.getHours();
+                let minutes: string | number = this.entry.future_publish_date.getMinutes();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                if (hours >= 12) {
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                }
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                this.customScheduleTime = hours + ':' + minutes + ' ' + ampm;
+            }
             setTimeout(() => {
                 this.entryService.currentlyEditedEntry.next(this.entry);
             }, 10);
@@ -214,6 +234,7 @@ export class EntryCreatorComponent implements OnInit {
             content.value = dialogRef.componentInstance.imgLink;
             content.additional = [];
             content.additional.push({key: Content.KEY_MIMETYPE, value: dialogRef.componentInstance.mimeType});
+            this.onChange();
         });
     }
 
@@ -265,6 +286,8 @@ export class EntryCreatorComponent implements OnInit {
     resetDate() {
         this.entry.create_date = new Date();
         this.entry.edit_date = new Date();
+
+        this.onChange();
     }
 
     startNew() {
@@ -327,18 +350,19 @@ export class EntryCreatorComponent implements OnInit {
         this.entry.future_publish_date = null;
         this.entry.should_publish_in_future = false;
         this.scheduling = false;
+        this.onChange();
     }
-
 
     exposeScheduling() {
         const scheduledDate = new Date();
         scheduledDate.setDate(scheduledDate.getDate() + 1);
 
-        this.customScheduleTime = scheduledDate.getHours() + ':' + scheduledDate.getMinutes() + ' AM';
-
         this.entry.future_publish_date = scheduledDate;
+        this.setTime(this.customScheduleTime);
+
         this.entry.should_publish_in_future = true;
         this.scheduling =  true;
+        this.onChange();
     }
     publish() {
         const publish = confirm('Are you sure you want to publish? Once an article is published it is available to everyone.');
@@ -357,7 +381,26 @@ export class EntryCreatorComponent implements OnInit {
             });
         }
     }
+    onDateChange() {
+        this.entry.future_publish_date.setHours(this.hours);
+        this.entry.future_publish_date.setMinutes(this.minutes);
+        this.onChange();
+    }
+
+
     setTime(e) {
-        console.log(JSON.stringify(e));
+        const firstTimeSplit = e.split(' ');
+        const secondTimeSplit = firstTimeSplit[0].split(':');
+        this.hours = Number(secondTimeSplit[0]);
+        this.minutes = Number(secondTimeSplit[1]);
+
+        if (firstTimeSplit[1] === 'PM') {
+            this.hours = Number(this.hours) + 12;
+        }
+
+        this.entry.future_publish_date.setHours(this.hours);
+        this.entry.future_publish_date.setMinutes(this.minutes);
+
+        this.onChange();
     }
 }
