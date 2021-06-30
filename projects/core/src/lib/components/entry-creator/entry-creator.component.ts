@@ -165,6 +165,21 @@ export class EntryCreatorComponent implements OnInit {
         });
     }
 
+    createNewEntry() {
+        this.entry = new Entry();
+        this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
+        this.entry.published = false;
+        this.entry.version = 1;
+
+        this.entryService.create(this.entry).subscribe((response) => {
+            this.entry = response;
+            this.entry.sort();
+            setTimeout(() => {
+                this.entryService.currentlyEditedEntry.next(this.entry);
+            }, 10);
+        });
+    }
+
     ngOnInit() {
         this.refreshTags();
         this.identityService.getMe().subscribe((me) => {
@@ -176,6 +191,11 @@ export class EntryCreatorComponent implements OnInit {
 
         if (savedEntry) {
             this.entry = new Entry(JSON.parse(savedEntry));
+
+            if (this.entry.should_publish_in_future && this.entry.future_publish_date < new Date()) {
+                this.createNewEntry();
+            }
+
             this.entry.sort();
             if (this.entry.should_publish_in_future) {
                 // Restore scheduling settings
@@ -194,18 +214,7 @@ export class EntryCreatorComponent implements OnInit {
                 this.entryService.currentlyEditedEntry.next(this.entry);
             }, 10);
         } else {
-            this.entry = new Entry();
-            this.entry.title = EntryCreatorComponent.DEFAULT_NEW_ENTRY_TITLE;
-            this.entry.published = false;
-            this.entry.version = 1;
-
-            this.entryService.create(this.entry).subscribe((response) => {
-                this.entry = response;
-                this.entry.sort();
-                setTimeout(() => {
-                    this.entryService.currentlyEditedEntry.next(this.entry);
-                }, 10);
-            });
+            this.createNewEntry();
         }
 
         this.uploader.onCompleteItem = (item, response) => {
