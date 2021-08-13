@@ -379,7 +379,7 @@ export class EntryCreatorComponent implements OnInit {
             this.entry.published = true;
             this.entry.publish_date = new Date();
             this.entry.edit_date = new Date();
-            this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback);
+            this.entryService.updateUnpublishedEntry(this.entry).subscribe(this.postPublishCallback.bind(this));
         }
     }
     delete() {

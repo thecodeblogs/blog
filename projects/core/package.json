@@ -1,6 +1,6 @@
 {
   "name": "@thecodeblogs/blog",
-  "version": "0.11.4",
+  "version": "0.11.5",
   "dependencies": {
     "tslib": "^2.0.0"
   },
