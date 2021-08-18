@@ -64,7 +64,7 @@ export class Entry extends Base {
         // For entries that existed before this variable was introduced, the server will return undefined. If this
         // stays undefined, it will violate the null constraints on the DB, so this code checks for both null
         // and undefined and then populates the value accordingly
-        if (typeof(this.should_publish_in_future) === 'undefined' && this.should_publish_in_future === null) {
+        if (typeof(this.should_publish_in_future) === 'undefined' || this.should_publish_in_future === null) {
             this.should_publish_in_future = false;
         }
     }
